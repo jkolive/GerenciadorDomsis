@@ -2,3 +2,5 @@
 
 # Executar o arquivo Install_SD.sh
 ./Install_SD.sh
+
+![http://opensourcesolution.com.br/github/telainicial.png] (http://opensourcesolution.com.br/github/telainicial.png)
