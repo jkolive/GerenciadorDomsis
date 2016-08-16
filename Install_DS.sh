@@ -1,4 +1,10 @@
 #!/bin/bash
+# Versão: alpha 1.0.2
+# Nome: Install_DS.sh
+# Descrição: Instala o gerenciador de banco de dados Sybase 16 - 64 bits
+# Escrito por: Jacksond de Oliveira ( Campinas - São Paulo)
+# E-mail: mr.jkolive@gmail.com
+# Versões testadas: Debian 7 e 8, CentOS 6 e 7, Ubuntu 14.04 
 
 Instalacao(){
 
