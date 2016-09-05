@@ -220,7 +220,7 @@ if [ -d "/opt/sybase" ] ; then
 	killall -w -s 15 dbsrv16 > /dev/null 2>&1
 	echo "Efetuando um backup do banco de dados e enviando para a pasta $HOME/backup_dominio."
 	sleep 1
-	cp -R $recup_local/contabil/dados $HOME/backup_dominio > /dev/null 2>&1
+	cp -R $recup_local/contabil/dados* $HOME/backup_dominio > /dev/null 2>&1
 	rm -fr $recup_local/contabil > /dev/null 2>&1
 	rm -fr /opt/sybase > /dev/null 2>&1
 	rm /opt/instalacao.txt > /dev/null 2>&1
@@ -347,6 +347,7 @@ if [ $op -eq 1 ] ; then
                                 echo 'Nome do servidor já em uso, por favor informe outro nome.'
                         else
                                 source /opt/sybase/SYBSsa16/bin64/setenv
+				echo 'Aguarde...iniciando banco...'
                                 echo 'dbsrv16 -c '$half_memory'M -n '$srvnome2' -ud -o '$local_inst'/contabil/dados2/log/logservidor.txt '$local_inst'/contabil/dados2/contabil.db' >> /etc/init.d/startDomsis.sh
                                 dbsrv16 -c "$half_memory"M -n "$srvnome2" -ud -o "$local_inst"/contabil/dados2/log/logservidor.txt "$local_inst"/contabil/dados2/contabil.db
                                 echo "Banco $srvnome2 iniciado com sucesso!"
@@ -403,19 +404,13 @@ if [ -d "/opt/sybase" ] ; then
 	echo 'Parando o banco de dados....aguarde.'
 	sleep 10
 	echo "OK, efetuando backup do banco de dados e enviado para a pasta $HOME/backup_dominio...Aguarde"
-	mkdir -p $HOME/backup_dominio
-	cd $recup_local/contabil/dados
-	cp *.db *.log $HOME/backup_dominio > /dev/null 2>&1
-	ls *[A-Z]* | while read maiuscula
-		do
-			minuscula=`echo $maiuscula | tr [A-Z] [a-z]`
-			mv $maiuscula $minuscula > /dev/null 2>&1
-		done
-			tput setaf 2
-			echo 'Cópia efetuada com sucesso!'
-			echo
-			read -p 'Pressione [Enter] para voltar ao menu ou CTRL+C para sair...'
-			Menu # Função
+	mkdir -p $HOME/backup_dominio > /dev/null 2>&1
+	cp -R $recup_local/contabil/dados* $HOME/backup_dominio > /dev/null 2>&1
+	tput setaf 2
+	echo 'Cópia efetuada com sucesso!'
+	echo
+	read -p 'Pressione [Enter] para voltar ao menu ou CTRL+C para sair...'
+	Menu # Função
 else
 	echo 'Sistema não instalado!'
 	sleep 1
