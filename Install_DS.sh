@@ -14,7 +14,7 @@ dpkg --help > /dev/null 2>&1  # Comando teste
 
 if [ $? -eq 0 ] ; then
 	
-	glibc=`ldd --version | grep EGLIBC | cut -c 37-40`
+	glibc=`ldd --version | grep GLIBC`
 	echo "::: Versões instaladas :::"
 	echo "glibc - $glibc"
 	kernel=`uname -r | cut -c 1-6`
