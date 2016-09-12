@@ -8,6 +8,49 @@
 
 versao='1.0.3'
 
+versaoSistema(){
+
+dpkg --help > /dev/null 2>&1  # Comando teste
+
+if [ $? -eq 0 ] ; then
+	
+	glibc=`ldd --version | grep EGLIBC | cut -c 37-40`
+	echo "::: Versões instaladas :::"
+	echo "glibc - $glibc"
+	kernel=`uname -r | cut -c 1-6`
+	echo "Kernel - $kernel"
+	echo 
+
+	echo '  ----------------------------------------------------'
+	echo ' |       Versões suportadas Sqlanywhere 16            |'
+	echo ' |----------------------------------------------------|'
+	echo ' | Kernel: 2.6.18 ao 2.6.32; glibc 2.5, 2.9 e 2.12    |'
+	echo ' | Kernel: 3.2.0 ao 3.12.28; glibc 2.15, 2.17 e 2.19  |'
+	echo '  ----------------------------------------------------'
+	echo 
+
+elif [ glibc=`rpm -q glibc | cut -c 7-10` ] ; then
+ 
+	glibc=`rpm -q glibc | cut -c 7-10`
+	echo "::: Versões instaladas :::"
+	echo "glibc - $glibc"
+	kernel=`uname -r | cut -c 1-6`
+	echo "Kernel - $kernel"
+
+	echo '  ----------------------------------------------------'
+	echo ' |       Versões suportadas Sqlanywhere 16            |'
+	echo ' |----------------------------------------------------|'
+	echo ' | Kernel: 2.6.18 ao 2.6.32; glibc 2.5, 2.9 e 2.12    |'
+	echo ' | Kernel: 3.2.0 ao 3.12.28; glibc 2.15, 2.17 e 2.19  |'
+	echo '  ----------------------------------------------------'
+	echo 
+
+else 
+	echo 'Não foi possivel obter a versão do kernel e da biblioteca glibc'
+fi
+
+}
+
 Instalacao(){
 
 if [ -d /opt/sybase ] ; then
@@ -15,15 +58,15 @@ if [ -d /opt/sybase ] ; then
 	sleep 1
 	Menu # Função
 elif [ -d /opt/ ] ; then
+	versaoSistema # Função
 	echo 'Iniciando instalação...'
 	echo 'Instalando Domsis...'
 	yum install wget -y > /dev/null 2>&1
 	yum install psmisc -y > /dev/null 2>&1
 if [ -f /tmp/ASA-1600-1691-Linux-64.tar.gz ] ; then
 	tar -xvf /tmp/ASA-1600-1691-Linux-64.tar.gz -C /opt
-	clear
 elif `wget -c -P /opt http://download.domsis.com.br/instalacao/diversos/sybase16_linux_64/ASA-1600-1691-Linux-64.tar.gz` ; then
-	tar -xvf /opt/ASA-1600-1691-Linux-64.tar.gz -C /opt
+	tar -xvf /opt/ASA-1600-1691-Linux-64.tar.gz -C /opt > /dev/null 2>&1
 	mv /opt/ASA-1600-1691-Linux-64.tar.gz /tmp > /dev/null 2>&1
 else
 	tput setaf 3
