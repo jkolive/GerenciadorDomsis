@@ -22,7 +22,7 @@ if [ $? -eq 0 ] ; then
 	echo 
 
 	echo '  ----------------------------------------------------'
-	echo ' |       Versões suportadas SQL Anywhere 16            |'
+	echo ' |       Versões homologadas SQL Anywhere 16            |'
 	echo ' |----------------------------------------------------|'
 	echo ' | Kernel: 2.6.18 ao 2.6.32; glibc 2.5, 2.9 e 2.12    |'
 	echo ' | Kernel: 3.2.0 ao 3.12.28; glibc 2.15, 2.17 e 2.19  |'
@@ -38,7 +38,7 @@ elif [ glibc=`rpm -q glibc | cut -c 7-10` ] ; then
 	echo "Kernel - $kernel"
 
 	echo '  ----------------------------------------------------'
-	echo ' |       Versões suportadas SQL Anywhere 16            |'
+	echo ' |       Versões homologadas SQL Anywhere 16            |'
 	echo ' |----------------------------------------------------|'
 	echo ' | Kernel: 2.6.18 ao 2.6.32; glibc 2.5, 2.9 e 2.12    |'
 	echo ' | Kernel: 3.2.0 ao 3.12.28; glibc 2.15, 2.17 e 2.19  |'
