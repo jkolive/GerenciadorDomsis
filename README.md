@@ -3,4 +3,4 @@
 # Executar o arquivo Install_DS.sh
 ./Install_DS.sh
 
-![http://opensourcesolution.com.br/github/home.png] (http://opensourcesolution.com.br/github/home.png)
+[!(http://opensourcesolution.com.br/github/home.png)](http://opensourcesolution.com.br/github/home.png)

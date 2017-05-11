@@ -14,36 +14,36 @@ dpkg --help > /dev/null 2>&1  # Comando teste
 
 if [ $? -eq 0 ] ; then
 	
+	echo '  ----------------------------------------------------'
+        echo ' |       Versões homologadas SQL Anywhere 16          |'
+        echo ' |----------------------------------------------------|'
+        echo ' | Kernel: 2.6.18 ao 2.6.32; glibc 2.5, 2.9 e 2.12    |'
+        echo ' | Kernel: 3.2.0 ao 3.12.28; glibc 2.15, 2.17 e 2.19  |'
+        echo '  ----------------------------------------------------'
+        echo
+
 	glibc=`ldd --version | grep GLIBC`
-	echo "::: Versões instaladas :::"
+	echo "::: Versões instaladas em seu sistema :::"
 	echo "glibc - $glibc"
 	kernel=`uname -r | cut -c 1-6`
 	echo "Kernel - $kernel"
-	echo 
-
-	echo '  ----------------------------------------------------'
-	echo ' |       Versões homologadas SQL Anywhere 16            |'
-	echo ' |----------------------------------------------------|'
-	echo ' | Kernel: 2.6.18 ao 2.6.32; glibc 2.5, 2.9 e 2.12    |'
-	echo ' | Kernel: 3.2.0 ao 3.12.28; glibc 2.15, 2.17 e 2.19  |'
-	echo '  ----------------------------------------------------'
 	echo 
 
 elif [ glibc=`rpm -q glibc | cut -c 7-10` ] ; then
  
+	echo '  ----------------------------------------------------'
+        echo ' |       Versões homologadas SQL Anywhere 16          |'
+        echo ' |----------------------------------------------------|'
+        echo ' | Kernel: 2.6.18 ao 2.6.32; glibc 2.5, 2.9 e 2.12    |'
+        echo ' | Kernel: 3.2.0 ao 3.12.28; glibc 2.15, 2.17 e 2.19  |'
+        echo '  ----------------------------------------------------'
+        echo 
+
 	glibc=`rpm -q glibc | cut -c 7-10`
-	echo "::: Versões instaladas :::"
+	echo "::: Versões instaladas em seu sistema :::"
 	echo "glibc - $glibc"
 	kernel=`uname -r | cut -c 1-6`
 	echo "Kernel - $kernel"
-
-	echo '  ----------------------------------------------------'
-	echo ' |       Versões homologadas SQL Anywhere 16            |'
-	echo ' |----------------------------------------------------|'
-	echo ' | Kernel: 2.6.18 ao 2.6.32; glibc 2.5, 2.9 e 2.12    |'
-	echo ' | Kernel: 3.2.0 ao 3.12.28; glibc 2.15, 2.17 e 2.19  |'
-	echo '  ----------------------------------------------------'
-	echo 
 
 else 
 	echo 'Não foi possivel obter a versão do kernel e da biblioteca glibc'
@@ -64,7 +64,7 @@ elif [ -d /opt/ ] ; then
 	yum install wget -y > /dev/null 2>&1
 	yum install psmisc -y > /dev/null 2>&1
 if [ -f /tmp/ASA-1600-1691-Linux-64.tar.gz ] ; then
-	tar -xvf /tmp/ASA-1600-1691-Linux-64.tar.gz -C /opt
+	tar -xvf /tmp/ASA-1600-1691-Linux-64.tar.gz -C /opt > /dev/null 2>&1
 elif `wget -c -P /opt http://download.domsis.com.br/instalacao/diversos/sybase16_linux_64/ASA-1600-1691-Linux-64.tar.gz` ; then
 	tar -xvf /opt/ASA-1600-1691-Linux-64.tar.gz -C /opt > /dev/null 2>&1
 	mv /opt/ASA-1600-1691-Linux-64.tar.gz /tmp > /dev/null 2>&1
@@ -153,7 +153,7 @@ iniciarBanco # Função
 
 Validar(){
 	
-	echo 'Falta implementar'
+	echo 'Não implementado!'
         echo 
         read -p 'Pressione [Enter] para voltar ao menu ou CTRL+C para sair...'
         Menu # Função
@@ -176,7 +176,7 @@ dist=0
 while [ $dist != 1 ] && [ $dist != 2 ] ;
 	do
 		echo 'Qual distribuição está sendo usada? informe o número:'
-		echo '1 - Debian/Ubuntu/Ubuntu Server'
+		echo '1 - Debian/Ubuntu'
 		echo '2 - CentOS/Suse/Fedora'
 		read dist
 	if [ "$dist" -eq 1 ] ; then
@@ -214,7 +214,7 @@ echo 'iptables -I INPUT -p udp --dport 2638 -j ACCEPT' >> /etc/init.d/startDomsi
 echo 'echo 'Iniciando o servidor...'' >> /etc/init.d/startDomsis.sh
 echo 'dbsrv16 -c '$half_memory'M -n '$srvnome' -ud -o '$local_inst'/contabil/dados/log/logservidor.txt '$local_inst'/contabil/dados/contabil.db' >> /etc/init.d/startDomsis.sh
 
-# Comando para inicilização do sistema
+# Comando para inicialização do sistema
 update-rc.d startDomsis.sh defaults > /dev/null 2>&1
 
 if [ $? -eq 127 ] ; then
@@ -232,7 +232,7 @@ touch /etc/init.d/startDomsis.sh
 chmod +x /etc/init.d/startDomsis.sh
 echo '#!/bin/bash' >> /etc/init.d/startDomsis.sh
 echo '# chkconfig: 345 99 10' >> /etc/init.d/startDomsis.sh
-echo '# description: Domsis' >> /root/startDomsis.sh
+echo '# description: Domsis' >> /etc/init.d/startDomsis.sh
 echo 'source /opt/sybase/SYBSsa16/bin64/setenv > /dev/null 2>&1' >> /etc/init.d/startDomsis.sh
 echo 'echo 'Liberando porta 2638 no firewall'' >> /etc/init.d/startDomsis.sh
 echo 'firewall-cmd --permanent --zone=public --remove-port=2638/tcp' >> /etc/init.d/startDomsis.sh
@@ -501,14 +501,17 @@ Menu # Função
 }
 
 Menu() {
+
+tput setaf 1
+
 if [ "$(id -u)" != "0" ]; then
 	echo 'Você deve executar este script como root!'
 else
 	clear
 	echo "########################################################"
 	echo "|                Bem-vindo ao instalador               |"
-	echo "| SQL Anywhere 16 - (Domínio Sistemas) - Linux 64 bits |"
-	echo "|                   Versão alpha $versao                 |"
+	echo "|            SQL Anywhere 16 - Linux 64 bits           |"
+	echo "|                  Versão alpha $versao                  |"
 	echo "########################################################"
 	echo 'O que deseja realizar?'
 	echo 'Digite:'
