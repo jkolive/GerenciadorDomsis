@@ -4,7 +4,7 @@
 # Descrição: Instala o gerenciador de banco de dados Sybase 16 - 64 bits
 # Escrito por: Jackson de Oliveira ( Campinas - São Paulo)
 # E-mail: mr.jkolive@gmail.com
-# Versões testadas: Debian 7 e 8, CentOS 6 e 7, Ubuntu 14.04 
+# Versões testadas: Debian 7 e 8, CentOS 6 e 7, Ubuntu 12.04 e 14.04, Mint 19 Cinnamon
 
 versao='Beta 1.0.0'
 
@@ -246,7 +246,7 @@ while [ $dist == 0 ] ;
 		Head # Função
 		tput setaf 1
 		echo 'Qual distribuição está sendo usada? informe o número:'
-		echo '1 - Debian/Ubuntu'
+		echo '1 - Debian/Ubuntu/Mint'
 		echo '2 - CentOS/Suse/Fedora'
 		tput sgr0
 		read dist
