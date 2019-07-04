@@ -80,7 +80,7 @@ elif [ -d /opt/ ] ; then
 if [ -f /tmp/ASA-1600-1691-Linux-64.tar.gz ] ; then
 	tar -xvf /tmp/ASA-1600-1691-Linux-64.tar.gz -C /opt > /dev/null 2>&1
 	touch /opt/sybase/instalacao.txt
-elif `wget -c -P /opt http://download.domsis.com.br/instalacao/diversos/sybase16_linux_64/ASA-1600-1691-Linux-64.tar.gz` ; then
+elif `wget -c -P /opt http://download.dominiosistemas.com.br/instalacao/diversos/sybase16_linux_64/ASA-1600-1691-Linux-64.tar.gz` ; then
 	tar -xvf /opt/ASA-1600-1691-Linux-64.tar.gz -C /opt > /dev/null 2>&1
 	touch /opt/sybase/instalacao.txt
 	mv /opt/ASA-1600-1691-Linux-64.tar.gz /tmp > /dev/null 2>&1
