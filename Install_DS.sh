@@ -68,6 +68,7 @@ if [ -d /opt/sybase ] ; then
 	sleep 1
 	Menu # Função
 elif [ -d /opt/ ] ; then
+	mkdir -p /opt/sybase
 	versaoSistema # Função
 	tput setaf 7
 	echo 'Iniciando instalação...'
@@ -77,13 +78,25 @@ elif [ -d /opt/ ] ; then
 	clear
 	yum install wget -y > /dev/null 2>&1
 	yum install psmisc -y > /dev/null 2>&1
-if [ -f /tmp/ASA-1600-1691-Linux-64.tar.gz ] ; then
-	tar -xvf /tmp/ASA-1600-1691-Linux-64.tar.gz -C /opt > /dev/null 2>&1
+if [ -f /tmp/ASA-1600-2747-Linux-64.tar.gz ] ; then
+	tar -xvf /tmp/ASA-1600-2747-Linux-64.tar.gz -C /opt/sybase --strip-components=1 > /dev/null 2>&1
+	chmod +x -R /opt/sybase 
 	touch /opt/sybase/instalacao.txt
-elif `wget -c -P /opt http://download.dominiosistemas.com.br/instalacao/diversos/sybase16_linux_64/ASA-1600-1691-Linux-64.tar.gz` ; then
-	tar -xvf /opt/ASA-1600-1691-Linux-64.tar.gz -C /opt > /dev/null 2>&1
+	rm /opt/sybase/bin64/setenv
+       	echo 'SYBHOME="/opt/sybase"' >> /opt/sybase/bin64/setenv
+	echo 'PATH="$PATH:$SYBHOME/bin64"' >> /opt/sybase/bin64/setenv
+	echo 'LD_LIBRARY_PATH="$SYBHOME/lib64"' >> /opt/sybase/bin64/setenv
+	echo 'export PATH LD_LIBRARY_PATH' >> /opt/sybase/bin64/setenv	
+elif `wget -c -P /opt http://download.dominiosistemas.com.br/instalacao/diversos/sybase16_linux_64/ASA-1600-2747-Linux-64.tar.gz` ; then
+	tar -xvf /opt/ASA-1600-2747-Linux-64.tar.gz -C /opt/sybase --strip-components=1 > /dev/null 2>&1
+	chmod +x -R /opt/sybase
 	touch /opt/sybase/instalacao.txt
-	mv /opt/ASA-1600-1691-Linux-64.tar.gz /tmp > /dev/null 2>&1
+	rm /opt/sybase/bin64/setenv
+        echo 'SYBHOME="/opt/sybase"' >> /opt/sybase/bin64/setenv
+        echo 'PATH="$PATH:$SYBHOME/bin64"' >> /opt/sybase/bin64/setenv
+        echo 'LD_LIBRARY_PATH="$SYBHOME/lib64"' >> /opt/sybase/bin64/setenv
+        echo 'export PATH LD_LIBRARY_PATH' >> /opt/sybase/bin64/setenv
+	mv /opt/ASA-1600-2747-Linux-64.tar.gz /tmp > /dev/null 2>&1
 else
 	clear
 	tput setaf 7
@@ -103,10 +116,10 @@ fi
 	touch /etc/profile.d/domsis.sh
 	chmod +x /etc/profile.d/domsis.sh
 	echo '#!/bin/bash' >> /etc/profile.d/domsis.sh
-	echo 'PATH="$PATH:/opt/sybase/SYBSsa16/bin64"' >> /etc/profile.d/domsis.sh
-	echo 'LD_LIBRARY_PATH="/opt/sybase/SYBSsa16/lib64"' >> /etc/profile.d/domsis.sh
+	echo 'PATH="$PATH:/opt/sybase/bin64"' >> /etc/profile.d/domsis.sh
+	echo 'LD_LIBRARY_PATH="/opt/sybase/lib64"' >> /etc/profile.d/domsis.sh
 	echo 'export PATH LD_LIBRARY_PATH' >> /etc/profile.d/domsis.sh
-	export PATH="$PATH:/opt/sybase/SYBSsa16/bin64"
+	export PATH="$PATH:/opt/sybase/bin64"
 
 while [ ! -d "$local_inst" ]
 	do
@@ -123,7 +136,7 @@ while [ ! -d "$local_inst" ]
 		clear
 		mkdir -p $local_inst/contabil/dados/log
 		echo "$local_inst" >> /opt/sybase/instalacao.txt
-		chmod +x /opt/sybase/SYBSsa16/bin64/setenv
+		chmod +x /opt/sybase/bin64/setenv
 	else
 		tput setaf 7
 		clear
@@ -200,7 +213,7 @@ while [ -z $srvnome ]
 		tput sgr0
 	fi
 	done
-source /opt/sybase/SYBSsa16/bin64/setenv
+source /opt/sybase/bin64/setenv
 
 escolhaDistrib # Função
 
@@ -289,7 +302,7 @@ echo '# Default-Stop:   0 1 6' >> /etc/init.d/startDomsis.sh
 echo '# Short-Description: Start daemon at boot time' >> /etc/init.d/startDomsis.sh
 echo '# Description: Enable service provided by daemon.' >> /etc/init.d/startDomsis.sh
 echo '### END INIT INFO' >> /etc/init.d/startDomsis.sh
-echo 'source /opt/sybase/SYBSsa16/bin64/setenv > /dev/null 2>&1' >> /etc/init.d/startDomsis.sh
+echo 'source /opt/sybase/bin64/setenv > /dev/null 2>&1' >> /etc/init.d/startDomsis.sh
 echo 'echo 'Liberando porta 2638 no firewall'' >> /etc/init.d/startDomsis.sh
 echo 'iptables -D INPUT -p tcp --dport 2638 -j ACCEPT > /dev/null 2>&1' >> /etc/init.d/startDomsis.sh
 echo 'iptables -I INPUT -p tcp --dport 2638 -j ACCEPT' >> /etc/init.d/startDomsis.sh
@@ -320,7 +333,7 @@ chmod +x /etc/init.d/startDomsis.sh
 echo '#!/bin/bash' >> /etc/init.d/startDomsis.sh
 echo '# chkconfig: 345 99 10' >> /etc/init.d/startDomsis.sh
 echo '# description: Domsis' >> /etc/init.d/startDomsis.sh
-echo 'source /opt/sybase/SYBSsa16/bin64/setenv > /dev/null 2>&1' >> /etc/init.d/startDomsis.sh
+echo 'source /opt/sybase/bin64/setenv > /dev/null 2>&1' >> /etc/init.d/startDomsis.sh
 echo 'echo 'Liberando porta 2638 no firewall'' >> /etc/init.d/startDomsis.sh
 echo 'firewall-cmd --permanent --zone=public --remove-port=2638/tcp' >> /etc/init.d/startDomsis.sh
 echo 'firewall-cmd --permanent --zone=public --remove-port=2638/udp' >> /etc/init.d/startDomsis.sh
@@ -358,8 +371,9 @@ if [ -d "/opt/sybase" ] ; then
         echo "Banco encontrado!"
         echo "...efetuando o backup da pasta dados e enviando para a pasta $HOME/backup_dominio...Aguarde"
         tput sgr0
-        mkdir -p $HOME/backup_dominio > /dev/null 2>&1
-        cp -R $recup_local/contabil/dados* $HOME/backup_dominio > /dev/null 2>&1
+        mkdir -p $HOME/backup_dominio/Bancos > /dev/null 2>&1
+        cp -R $recup_local/contabil/dados "$HOME/backup_dominio/Bancos/dados_$(date +"%d-%m-%Y_%s")" > /dev/null 2>&1
+	cp -R $recup_local/contabil/dados2 "$HOME/backup_dominio/Bancos/dados_$(date +"%d-%m-%Y_%s")" > /dev/null 2>&1
 	rm -fr $recup_local/contabil > /dev/null 2>&1
 	rm -fr /opt/sybase > /dev/null 2>&1
 	rm /etc/profile.d/domsis.sh > /dev/null 2>&1
@@ -559,7 +573,7 @@ elif [ "$op" -eq 1 ] ; then
 				clear
 				Head # Função
 				echo "$srvnome2" >> /opt/sybase/instalacao.txt
-                                source /opt/sybase/SYBSsa16/bin64/setenv
+                                source /opt/sybase/bin64/setenv
 				tput setaf 7
 				echo 'Aguarde...iniciando banco...'
 				tput sgr0
@@ -643,8 +657,9 @@ if [ -d "/opt/sybase" ] ; then
 	echo "Banco encontrado!"
 	echo "...efetuando o backup da pasta dados e enviando para a pasta $HOME/backup_dominio...Aguarde"
 	tput sgr0
-	mkdir -p $HOME/backup_dominio > /dev/null 2>&1
-	cp -R $recup_local/contabil/dados* $HOME/backup_dominio > /dev/null 2>&1
+	mkdir -p $HOME/backup_dominio/Bancos > /dev/null 2>&1
+        cp -R $recup_local/contabil/dados "$HOME/backup_dominio/Bancos/dados_$(date +"%d-%m-%Y_%s")" > /dev/null 2>&1
+        cp -R $recup_local/contabil/dados2 "$HOME/backup_dominio/Bancos/dados_$(date +"%d-%m-%Y_%s")" > /dev/null 2>&1
 	tput setaf 7
 	echo 'Cópia efetuada com sucesso!'
 	tput sgr0
@@ -679,9 +694,9 @@ if [ -d "/opt/sybase" ] ; then
 	tput sgr0
 	read razaoSocial
 
-	source /opt/sybase/SYBSsa16/bin64/setenv
+	source /opt/sybase/bin64/setenv
 
-	dblic -l perseat -u $quantLic /opt/sybase/SYBSsa16/bin64/dbsrv16.lic "$apelidoEmpresa" "$razaoSocial"
+	dblic -l perseat -u $quantLic /opt/sybase/bin64/dbsrv16.lic "$apelidoEmpresa" "$razaoSocial"
 	echo
 	tput setaf 2
 	read -p 'Pressione [Enter] para voltar ao menu ou CTRL+C para sair...'
